@@ -153,15 +153,16 @@ const Dashboard: React.FC = (props) => {
     console.log("Attempting to add funds:", amount);
   
     try {
-      const response = await axios.post(
-        "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
-        { amount: amount }, 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+const response = await axios.post(
+  "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
+  { amount: amount },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  }
+);
   
       console.log("Response from API:", response.data); // Log the response
       alert("Funds added successfully!");
