@@ -134,41 +134,49 @@ const Dashboard: React.FC = (props) => {
   };
 
   const handleAddFunds = async () => {
-    if (amount <= 0) {
-      alert("Please enter a valid amount.");
-      return;
-    }
-  
-    if (!token) {
-      alert("You are not logged in."); 
-      return; 
-    }
-  
-    console.log("Attempting to add funds:", amount);
-  
-    try {
-const response = await axios.post(
-  "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
-  {userId: 1, phoneNumber: "0794649026", amount: amount },
-  {
-    headers: {
-            'Content-Type': 'application/json',
-    },
+  if (amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
   }
-);
-  
-      console.log("Response from API:", response.data); // Log the response
-      alert("Funds added successfully!");
-      setAmount(0); // Reset the amount after successful deposit
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        alert(`Failed to add funds: ${error.response?.data?.message || error.message}`);
-      } else {
-        alert("Failed to add funds");
+
+  if (!token) {
+    alert("You are not logged in.");
+    return;
+  }
+
+  console.log("Attempting to add funds:", amount);
+
+  try {
+    const response = await axios.post(
+      "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
+      { userId: 1, phoneNumber: "0794649026", amount: amount },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
-      console.error("Error adding funds:", error);
+    );
+
+    console.log("Response from API:", response.data); // Log the response
+
+    // Check if the response contains the redirect_url
+    if (response.data?.data?.transaction?.redirect_url) {
+      // Open the redirect_url in a new tab
+      window.open(response.data.data.transaction.redirect_url, "_blank");
     }
-  };
+
+    alert("Funds added successfully!");
+    setAmount(0); // Reset the amount after successful deposit
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      alert(`Failed to add funds: ${error.response?.data?.message || error.message}`);
+    } else {
+      alert("Failed to add funds");
+    }
+    console.error("Error adding funds:", error);
+  }
+};
+
 
    const donutData = {
     labels: selectedPlan ? [selectedPlan.title, "Goal Remaining"] : ["No Plan Selected"],
