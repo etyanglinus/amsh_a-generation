@@ -162,7 +162,7 @@ const Dashboard: React.FC = (props) => {
     // Check if the response contains the redirect_url
     if (response.data?.data?.transaction?.redirect_url) {
       // Open the redirect_url in a new tab
-      window.open(response.data.data.transaction.redirect_url, "_blank");
+      window.open(response.data.transaction.redirect_url, "_blank");
     }
 
     alert("Funds added successfully!");
