@@ -50,7 +50,7 @@ const Dashboard: React.FC = (props) => {
   // Check if the token exists, redirect if not
   useEffect(() => {
     if (!token) {
-      router.push("/login"); // Redirect to login if no token
+      router.push("/signin"); // Redirect to login if no token
     }
   }, [token, router]);
 
