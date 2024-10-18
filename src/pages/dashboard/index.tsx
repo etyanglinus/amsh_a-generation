@@ -139,6 +139,8 @@ const Dashboard: React.FC = (props) => {
     return;
   }
 
+  const token = Cookies.get("token"); // Retrieve token from cookies
+
   if (!token) {
     alert("You are not logged in.");
     return;
@@ -157,25 +159,29 @@ const Dashboard: React.FC = (props) => {
       }
     );
 
-    console.log("Response from API:", response.data); // Log the response
+    const responseData = response.data;
+    console.log("Response from API:", responseData);
 
-    // Check if the response contains the redirect_url
-    if (response.data?.data?.transaction?.redirect_url) {
-      // Open the redirect_url in a new tab
-      window.open(response.data.transaction.redirect_url, "_blank");
+    if (responseData.statusCode === 200 && responseData.data.transaction.redirect_url) {
+      alert("Funds added successfully!");
+      setAmount(0); // Reset the amount after successful deposit
+      
+      // Open the redirect URL in a new tab
+      window.open(responseData.data.transaction.redirect_url, '_blank');
+    } else {
+      alert("Transaction successful, but no redirect URL found.");
     }
-
-    alert("Funds added successfully!");
-    setAmount(0); // Reset the amount after successful deposit
+    
   } catch (error) {
     if (axios.isAxiosError(error)) {
       alert(`Failed to add funds: ${error.response?.data?.message || error.message}`);
     } else {
-      alert("Failed to add funds");
+      alert("Failed to add funds: ${error}");
     }
     console.error("Error adding funds:", error);
   }
 };
+
 
 
    const donutData = {
