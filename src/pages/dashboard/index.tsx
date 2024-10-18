@@ -163,7 +163,7 @@ const Dashboard: React.FC = (props) => {
     console.log("Response from API:", responseData);
 
     if (responseData.statusCode === 200 && responseData.data.transaction.redirect_url) {
-      alert("Funds added successfully!");
+      alert("Click OK to deposit");
       setAmount(0); // Reset the amount after successful deposit
       
       // Open the redirect URL in a new tab
