@@ -61,7 +61,7 @@ const Dashboard: React.FC = (props) => {
       try {
         // Fetch line chart data
         const lineChartResponse = await axios.get(
-          "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/1",
+          "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35",
           {
             
           }
@@ -105,7 +105,7 @@ const Dashboard: React.FC = (props) => {
 
     try {
       const filterResponse = await axios.get(
-        `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/all?userId=1&startDate=${startDate}&endDate=${endDate}&type=${transactionType}`,
+        `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/all?userId=35&startDate=${startDate}&endDate=${endDate}&type=${transactionType}`,
         {
           
         }
