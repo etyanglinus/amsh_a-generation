@@ -1,0 +1,13 @@
+##for more endpoints check out the   src/pages/api folder
+
+there are for the dashboad
+src/pages/api/budgetCategories.tsx 
+src/pages/api/careerTools.tsx 
+src/pages/api/communitySupport.tsx 
+src/pages/api/educationalResources.tsx
+ src/pages/api/savings-plans.tsx
+src/pages/api/initiatePayment.tsx
+
+## these are endpoints for the landing page
+src/pages/api/team.tsx 
+src/pages/api/blog.tsx
