@@ -100,21 +100,24 @@ const Dashboard: React.FC = (props) => {
   }, []);
 
   // Function to handle filtering
-  const handleFilter = async () => {
-    if (!token) return; // Ensure token is available before fetching
+const handleSearch = async () => {
+  console.log("Attempting to search transactions:", { userId: 35, startDate, endDate, searchQuery });
 
-    try {
-      const filterResponse = await axios.get(
-        `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/all?userId=35&startDate=${startDate}&endDate=${endDate}&type=${transactionType}`,
-        {
-          
+  try {
+    const searchResponse = await axios.get(
+      `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35?startDate=${startDate}&endDate=${endDate}&search=${searchQuery}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
         }
-      );
-      setFilteredTransactions(filterResponse.data);
-    } catch (error) {
-      console.error("Error fetching filtered transactions:", error);
-    }
-  };
+      }
+    );
+    setFilteredTransactions(searchResponse.data);
+  } catch (error) {
+    console.error("Error searching transactions:", error);
+  }
+};
+
 
   // Function to handle search
 const handleSearch = async () => {
