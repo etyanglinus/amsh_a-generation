@@ -1,4 +1,4 @@
-"use client";
+   "use client";
 
 import axios from "axios";
 import {
@@ -38,6 +38,7 @@ const Dashboard: React.FC = (props) => {
   const [filteredTransactions, setFilteredTransactions] = useState<any[]>([]);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [transactionType, setTransactionType] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [amount, setAmount] = useState<number>(0); // State for the deposit amount
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +61,10 @@ const Dashboard: React.FC = (props) => {
       try {
         // Fetch line chart data
         const lineChartResponse = await axios.get(
-          "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35"
+          "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35",
+          {
+            
+          }
         );
 
         const data = lineChartResponse.data;
@@ -95,70 +99,101 @@ const Dashboard: React.FC = (props) => {
     }
   }, []);
 
-  // Function to handle searching transactions by userId, startDate, endDate, and searchQuery
-  const handleSearch = async () => {
-    const userId = 35; // Hardcoded user ID for fetching transactions
-    console.log("Attempting to search transactions:", { userId, startDate, endDate, searchQuery });
+  // Function to handle filtering
+const handleSearch = async () => {
+  console.log("Attempting to search transactions:", { userId: 35, startDate, endDate, searchQuery });
 
-    try {
-      const searchResponse = await axios.get(
-        `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/${userId}?startDate=${startDate}&endDate=${endDate}&search=${searchQuery}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          }
+  try {
+    const searchResponse = await axios.get(
+      https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35?startDate=${startDate}&endDate=${endDate}&search=${searchQuery},
+      {
+        headers: {
+          'Content-Type': 'application/json',
         }
-      );
+      }
+    );
+    setFilteredTransactions(searchResponse.data);
+  } catch (error) {
+    console.error("Error searching transactions:", error);
+  }
+};
 
-      // Set the filtered transactions with the response data
-      setFilteredTransactions(searchResponse.data);
-    } catch (error) {
-      console.error("Error searching transactions:", error);
-    }
-  };
 
-  // Function to handle adding funds
+// Function to handle search
+const handleSearch = async () => {
+  const userId = 35; // Hardcoded user ID for fetching transactions
+
+  console.log("Attempting to fetch transaction for userId:", userId);
+
+  try {
+    const searchResponse = await axios.get(
+      https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/tid/${userId},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+
+    // Assuming the response structure from the new endpoint
+    const transactionData = searchResponse.data.data.transaction;
+
+    // Set the filtered transactions with the transaction data
+    setFilteredTransactions(transactionData);
+  } catch (error) {
+    console.error("Error fetching transaction:", error);
+  }
+};
+
+
   const handleAddFunds = async () => {
-    if (amount <= 0) {
-      alert("Please enter a valid amount.");
-      return;
-    }
+  if (amount <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
 
-    console.log("Attempting to add funds:", amount);
+  const token = Cookies.get("token"); // Retrieve token from cookies
 
-    try {
-      const response = await axios.post(
-        "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
-        { userId: 35, phoneNumber: "0707876583", amount: amount },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+  if (!token) {
+    alert("You are not logged in.");
+    return;
+  }
 
-      const responseData = response.data;
-      console.log("Response from API:", responseData);
+  console.log("Attempting to add funds:", amount);
 
-      if (responseData.statusCode === 200 && responseData.data.transaction.redirect_url) {
-        alert("Click OK to deposit");
-        setAmount(0); // Reset the amount after successful deposit
-        
-        // Open the redirect URL in a new tab
-        window.open(responseData.data.transaction.redirect_url, '_blank');
-      } else {
-        alert("Transaction successful, but no redirect URL found.");
+  try {
+    const response = await axios.post(
+      "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
+      { userId: 35, phoneNumber: "0707876583", amount: amount },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
+    );
+
+    const responseData = response.data;
+    console.log("Response from API:", responseData);
+
+    if (responseData.statusCode === 200 && responseData.data.transaction.redirect_url) {
+      alert("Click OK to deposit");
+      setAmount(0); // Reset the amount after successful deposit
       
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        alert(`Failed to add funds: ${error.response?.data?.message || error.message}`);
-      } else {
-        alert("Failed to add funds: " + error);
-      }
-      console.error("Error adding funds:", error);
+      // Open the redirect URL in a new tab
+      window.open(responseData.data.transaction.redirect_url, '_blank');
+    } else {
+      alert("Transaction successful, but no redirect URL found.");
     }
-  };
+    
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      alert(Failed to add funds: ${error.response?.data?.message || error.message});
+    } else {
+      alert("Failed to add funds: ${error}");
+    }
+    console.error("Error adding funds:", error);
+  }
+};
     <DashboardLayout>
       <div className="dashboard-container">
         {/* First Row */}
