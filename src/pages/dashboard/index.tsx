@@ -149,7 +149,7 @@ const Dashboard: React.FC = (props) => {
     try {
 const response = await axios.post(
   "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/deposit",
-  { amount: amount },
+  {userId: 1, phoneNumber: "0794649026", amount: amount },
   {
     headers: {
             'Content-Type': 'application/json',
