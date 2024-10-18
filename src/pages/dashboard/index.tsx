@@ -63,9 +63,7 @@ const Dashboard: React.FC = (props) => {
         const lineChartResponse = await axios.get(
           "https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/1",
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            
           }
         );
 
@@ -109,9 +107,7 @@ const Dashboard: React.FC = (props) => {
       const filterResponse = await axios.get(
         `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/all?userId=1&startDate=${startDate}&endDate=${endDate}&type=${transactionType}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          
         }
       );
       setFilteredTransactions(filterResponse.data);
@@ -128,9 +124,7 @@ const Dashboard: React.FC = (props) => {
       const searchResponse = await axios.get(
         `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/all?userId=1&startDate=${startDate}&endDate=${endDate}&search=${searchQuery}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+         
         }
       );
       setFilteredTransactions(searchResponse.data);
@@ -158,8 +152,7 @@ const response = await axios.post(
   { amount: amount },
   {
     headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
     },
   }
 );
