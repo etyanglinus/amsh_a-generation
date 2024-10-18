@@ -1,4 +1,4 @@
-   "use client";
+"use client";
 
 import axios from "axios";
 import {
@@ -100,12 +100,29 @@ const Dashboard: React.FC = (props) => {
   }, []);
 
   // Function to handle filtering
+  const handleFilter = async () => {
+    if (!token) return; // Ensure token is available before fetching
+
+    try {
+      const filterResponse = await axios.get(
+        `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/all?userId=35&startDate=${startDate}&endDate=${endDate}&type=${transactionType}`,
+        {
+          
+        }
+      );
+      setFilteredTransactions(filterResponse.data);
+    } catch (error) {
+      console.error("Error fetching filtered transactions:", error);
+    }
+  };
+
+  // Function to handle search
 const handleSearch = async () => {
   console.log("Attempting to search transactions:", { userId: 35, startDate, endDate, searchQuery });
 
   try {
     const searchResponse = await axios.get(
-      https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35?startDate=${startDate}&endDate=${endDate}&search=${searchQuery},
+      `https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/uid/35?startDate=${startDate}&endDate=${endDate}&search=${searchQuery}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -115,33 +132,6 @@ const handleSearch = async () => {
     setFilteredTransactions(searchResponse.data);
   } catch (error) {
     console.error("Error searching transactions:", error);
-  }
-};
-
-
-// Function to handle search
-const handleSearch = async () => {
-  const userId = 35; // Hardcoded user ID for fetching transactions
-
-  console.log("Attempting to fetch transaction for userId:", userId);
-
-  try {
-    const searchResponse = await axios.get(
-      https://amsha-gen-96609f863a46.herokuapp.com/api/transactions/tid/${userId},
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    );
-
-    // Assuming the response structure from the new endpoint
-    const transactionData = searchResponse.data.data.transaction;
-
-    // Set the filtered transactions with the transaction data
-    setFilteredTransactions(transactionData);
-  } catch (error) {
-    console.error("Error fetching transaction:", error);
   }
 };
 
@@ -187,13 +177,35 @@ const handleSearch = async () => {
     
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      alert(Failed to add funds: ${error.response?.data?.message || error.message});
+      alert(`Failed to add funds: ${error.response?.data?.message || error.message}`);
     } else {
       alert("Failed to add funds: ${error}");
     }
     console.error("Error adding funds:", error);
   }
 };
+
+
+
+   const donutData = {
+    labels: selectedPlan ? [selectedPlan.title, "Goal Remaining"] : ["No Plan Selected"],
+    datasets: [
+      {
+        label: "Savings Breakdown",
+        data: selectedPlan ? [selectedPlan.current, selectedPlan.goal - selectedPlan.current] : [0, 1],
+        backgroundColor: [
+          "rgba(54, 162, 235, 0.6)",
+          "rgba(255, 99, 132, 0.6)",
+        ],
+        borderColor: [
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 99, 132, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+  return (
     <DashboardLayout>
       <div className="dashboard-container">
         {/* First Row */}
