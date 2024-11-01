@@ -28,7 +28,7 @@ const Sidebar: React.FC = () => {
 
             {/* Navigation Links */}
             <ul style={listStyle}>
-                {['Transaction History', 'Savings Plan', 'budget', 'Wallet', 'Settings'].map((item, index) => {
+                {['Transaction History', 'Savings Plan', 'Budget', 'Wallet', 'Settings'].map((item, index) => {
                     const path = `/dashboard/${item.toLowerCase().replace(/\s+/g, '-')}`;
                     return (
                         <li
