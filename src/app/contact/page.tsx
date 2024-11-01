@@ -14,7 +14,7 @@ const ContactPage = () => {
     <>
       <Breadcrumb
         pageName="Contact Page"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
+        description="At Amsha Generation, we value your feedback and are here to assist you with any questions or concerns you may have. Whether you're looking for more information about our services, need assistance with your account, or just want to share your thoughts, please don’t hesitate to get in touch."
       />
 
       <Contact />

@@ -1,169 +1,134 @@
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import DashboardLayout from '../../components/Dashboard/DashboardLayout';
+/* eslint-disable @next/next/no-img-element */
+"use client";
 
-// Define the type for the settings
-interface Setting {
+import DashboardLayout from '@/components/Dashboard/Layout';
+import { useEffect, useState } from 'react';
+
+interface UserData {
   id: number;
-  name: string;
-  description: string;
-  link: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  profilePic: string | null;
 }
 
-// Sample settings data simulating an API response
-const sampleSettings: Setting[] = [
-  {
-    id: 1,
-    name: 'Account Settings',
-    description: 'Manage your account settings, including username and email.',
-    link: '/settings/account',
-  },
-  {
-    id: 2,
-    name: 'Notification Preferences',
-    description: 'Set your preferences for receiving notifications.',
-    link: '/settings/notifications',
-  },
-  {
-    id: 3,
-    name: 'Privacy Settings',
-    description: 'Manage your privacy settings and control data sharing.',
-    link: '/settings/privacy',
-  },
-];
-
-const Settings = () => {
-  // Use the Setting[] type for the useState hook
-  const [settings, setSettings] = useState<Setting[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // Simulate fetching settings from an API
-  const fetchSettings = async () => {
-    // Simulate network delay
-    setTimeout(() => {
-      setSettings(sampleSettings);
-      setLoading(false);
-    }, 1000);
-  };
+const UserSettingsPage = (props) => {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [newProfilePic, setNewProfilePic] = useState<File | null>(null);
 
   useEffect(() => {
-    fetchSettings();
+    const fetchUserData = async () => {
+      const storedUser = localStorage.getItem('userData');
+      const user = storedUser ? JSON.parse(storedUser) : null;
+
+      if (!user || !user.id) {
+        setError('User not logged in');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Fetch user data
+        const response = await fetch(`http://amsha-gen-96609f863a46.herokuapp.com/api/user/${user.id}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setUserData(data.data.user);
+        } else {
+          setError(data.message || 'Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setError('An error occurred while fetching user data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
-  if (loading) {
-    return <p>Loading settings...</p>;
-  }
+  const handleProfilePicUpload = async () => {
+    setSuccessMessage(null);
+
+    if (!newProfilePic) {
+      setError('Please select an image file');
+      return;
+    }
+
+    const storedUser = localStorage.getItem('userData');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+
+    if (!user || !user.id) {
+      setError('User not logged in');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", newProfilePic);
+
+    try {
+      const response = await fetch(
+        `https://amsha-gen-96609f863a46.herokuapp.com/api/user/profilepic/${user.id}/spring-tut-1`,
+        {
+          method: 'PUT',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage('Profile picture uploaded successfully.');
+        setUserData((prev) => prev && { ...prev, profilePic: data.filePath });
+      } else {
+        setError(data.message || 'Failed to upload profile picture');
+      }
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      setError('An error occurred while uploading profile picture.');
+    }
+  };
+
+  if (loading) return <p>Loading user settings...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <DashboardLayout>
-      <div className="settings-section">
-        <h3>Settings</h3>
+      <div style={{ margin: '0 0 0 200px', fontFamily: 'Arial, sans-serif' }}>
+        <h2>User Settings</h2>
+        {userData && (
+          <div style={{ fontSize: '18px' }}>
+            <p><strong>Full Name:</strong> {userData.fullName}</p>
+            <p><strong>Email:</strong> {userData.email}</p>
+            <p><strong>Phone Number:</strong> {userData.phoneNumber}</p>
 
-        {/* Navigation Links for Settings Sections */}
-        <nav className="settings-nav">
-          {settings.map((setting) => (
-            <Link key={setting.id} href={setting.link} className="nav-link">
-              {setting.name}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Settings List Section */}
-        <div className="tool-section settings-list">
-          {settings.map((setting) => (
-            <div className="setting-card" key={setting.id}>
-              <h4>{setting.name}</h4>
-              <p>{setting.description}</p>
-              <Link href={setting.link} className="settings-link">
-                Go to Settings
-              </Link>
+            <div style={{ marginTop: '20px' }}>
+              <h3>Update Profile Picture</h3>
+              {userData.profilePic && (
+                <img
+                  src={userData.profilePic}
+                  alt="Profile"
+                  style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                />
+              )}
+              <input
+                type="file"
+                onChange={(e) => setNewProfilePic(e.target.files ? e.target.files[0] : null)}
+                style={{ marginTop: '10px' }}
+              />
+              <button onClick={handleProfilePicUpload} style={{ marginTop: '10px' }}>Upload Picture</button>
             </div>
-          ))}
-        </div>
+
+            {successMessage && <p style={{ color: 'green', marginTop: '10px' }}>{successMessage}</p>}
+          </div>
+        )}
       </div>
-
-      {/* Styling */}
-      <style jsx>{`
-        .settings-section {
-          padding: 20px;
-          padding-left: 240px; /* Padding from the sidebar */
-        }
-
-        h3 {
-          font-size: 28px;
-          font-weight: 600;
-          color: #333;
-          margin-bottom: 30px;
-          font-family: 'sans-serif';
-        }
-
-        .settings-nav {
-          display: flex;
-          gap: 15px;
-          margin-bottom: 20px;
-        }
-
-        .nav-link {
-          padding: 10px 15px;
-          background-color: #e0e0e0;
-          border-radius: 5px;
-          text-decoration: none;
-          color: #333;
-          font-weight: bold;
-        }
-
-        .nav-link:hover {
-          background-color: #d0d0d0;
-        }
-
-        .tool-section {
-          background-color: #fff;
-          padding: 20px;
-          border-radius: 12px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          margin-bottom: 30px;
-          margin-left: 20px; /* Added padding to create space from left side */
-        }
-
-        .setting-card {
-          padding: 20px;
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          margin-bottom: 20px;
-        }
-
-        h4 {
-          font-size: 22px;
-          font-weight: 500;
-          margin-bottom: 15px;
-          color: #2c3e50;
-          font-family: 'sans-serif';
-        }
-
-        p {
-          font-size: 16px;
-          color: #555;
-          margin-bottom: 10px;
-          font-family: 'sans-serif';
-        }
-
-        .settings-link {
-          display: inline-block;
-          margin-top: 10px;
-          padding: 10px 15px;
-          background-color: royalblue;
-          color: white;
-          border-radius: 5px;
-          text-decoration: none;
-        }
-
-        .settings-link:hover {
-          background-color: darkblue;
-        }
-      `}</style>
     </DashboardLayout>
   );
 };
 
-export default Settings;
+export default UserSettingsPage;

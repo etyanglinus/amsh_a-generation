@@ -6,6 +6,11 @@ const Brands = () => {
   return (
     <section className="pt-16">
       <div className="container">
+        {/* Add the heading */}
+        <h2 className="mb-8 text-center text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          Our Partners
+        </h2>
+        
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="flex flex-wrap items-center justify-center rounded-sm bg-gray-light px-8 py-8 dark:bg-gray-dark sm:px-10 md:px-[50px] md:py-[40px] xl:p-[50px] 2xl:px-[70px] 2xl:py-[60px]">
@@ -33,7 +38,6 @@ const SingleBrand = ({ brand }: { brand: Brand }) => {
         rel="nofollow noreferrer"
         className="relative h-10 w-full opacity-70 transition hover:opacity-100 dark:opacity-60 dark:hover:opacity-100"
       >
-        {/* Conditionally render imageLight if it exists */}
         {imageLight ? (
           <Image
             src={imageLight}
@@ -43,13 +47,12 @@ const SingleBrand = ({ brand }: { brand: Brand }) => {
           />
         ) : (
           <Image
-            src={image} // Fallback to the default image if imageLight is undefined
+            src={image}
             alt={name}
             fill
             className="hidden dark:block"
           />
         )}
-
         <Image
           src={image}
           alt={name}

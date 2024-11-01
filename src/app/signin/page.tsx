@@ -42,7 +42,10 @@ const SigninPage = () => {
 
       if (response.ok) {
         // Store the token in cookies
-        Cookies.set('token', data.token, { expires: 1 }); // Expires in 1 day
+        Cookies.set('token', data.data.user.token, { expires: 1 }); // Expires in 1 day
+
+        // Save the user data in localStorage
+        localStorage.setItem("userData", JSON.stringify(data.data.user));
 
         setSuccessMessage('Signin successful! Redirecting to dashboard...');
         
@@ -124,65 +127,6 @@ const SigninPage = () => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Decorative SVG */}
-        <div className="absolute left-0 top-0 z-[-1]">
-          <svg
-            width="1440"
-            height="969"
-            viewBox="0 0 1440 969"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <mask
-              id="mask0_95:1005"
-              style={{ maskType: 'alpha' }}
-              maskUnits="userSpaceOnUse"
-              x="0"
-              y="0"
-              width="1440"
-              height="969"
-            >
-              <rect width="1440" height="969" fill="#090E34" />
-            </mask>
-            <g mask="url(#mask0_95:1005)">
-              <path
-                opacity="0.1"
-                d="M1086.96 297.978L632.959 554.978L935.625 535.926L1086.96 297.978Z"
-                fill="url(#paint0_linear_95:1005)"
-              />
-              <path
-                opacity="0.1"
-                d="M1324.5 755.5L1450 687V886.5L1324.5 967.5L-10 288L1324.5 755.5Z"
-                fill="url(#paint1_linear_95:1005)"
-              />
-            </g>
-            <defs>
-              <linearGradient
-                id="paint0_linear_95:1005"
-                x1="1178.4"
-                y1="151.853"
-                x2="780.959"
-                y2="453.33"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#4A6CF7" />
-                <stop offset="1" stopColor="#4A6CF7" stopOpacity="0" />
-              </linearGradient>
-              <linearGradient
-                id="paint1_linear_95:1005"
-                x1="145"
-                y1="118"
-                x2="844.5"
-                y2="1787"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#4A6CF7" />
-                <stop offset="1" stopColor="#4A6CF7" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-          </svg>
         </div>
       </section>
     </>

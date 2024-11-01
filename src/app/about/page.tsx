@@ -15,8 +15,8 @@ const AboutPage = () => {
   return (
     <>
       <Breadcrumb
-        pageName="About Page"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. In varius eros eget sapien consectetur ultrices. Ut quis dapibus libero."
+        pageName="Welcome to Amsha Generation!"
+        description="At Amsha Generation, we are dedicated to transforming the financial landscape for individuals and families. Our mission is to empower you to take control of your financial future through innovative savings, investment solutions, and personalized financial education."
       />
       <AboutSectionOne />
       <AboutSectionTwo />

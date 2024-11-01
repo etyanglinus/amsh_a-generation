@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Define an interface for the team member object
 interface TeamMember {
@@ -11,22 +11,32 @@ interface TeamMember {
 }
 
 const AboutSectionThree = () => {
-  // Use the interface to define the type for the state
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-
-  useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        const response = await fetch('/api/team');
-        const data: TeamMember[] = await response.json(); // Ensure fetched data matches the type
-        setTeamMembers(data);
-      } catch (error) {
-        console.error('Error fetching team members:', error);
-      }
-    };
-
-    fetchTeamMembers();
-  }, []);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
+    {
+      name: "Samuel Kodilu",
+      image: "/images/team/ceo.jpg", // Update with actual image path
+      role: "CEO",
+      description: "Leading the company towards innovation and growth.",
+    },
+    {
+      name: "Justine Timberlake Omwenga",
+      image: "/images/team/cfo.jpg", // Update with actual image path
+      role: "CFO",
+      description: "Managing financial strategies and operations.",
+    },
+    {
+      name: "Robert Aundo",
+      image: "/images/team/coo.jpeg", // Update with actual image path
+      role: "COO",
+      description: "Overseeing daily operations and business functions.",
+    },
+    {
+      name: "Andrew Kyosi",
+      image: "/images/team/head of coporate.jpg", // Update with actual image path
+      role: "Head of Corporate",
+      description: "Driving corporate strategy and partnerships.",
+    },
+  ]);
 
   return (
     <section className="py-16 md:py-20 lg:py-28">
@@ -48,8 +58,8 @@ const AboutSectionThree = () => {
           <div className="w-full px-4 lg:w-1/2">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2">
               {teamMembers.map((member, index) => (
-                <div key={index} className="text-center">
-                  <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
+                <div key={index} className="w-[300px] rounded-lg shadow-lg overflow-hidden bg-white text-center p-4">
+                  <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-gray-300">
                     <Image
                       src={member.image}
                       alt={member.name}

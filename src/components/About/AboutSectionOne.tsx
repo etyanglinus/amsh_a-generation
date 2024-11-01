@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SectionTitle from "../Common/SectionTitle";
 
 const checkIcon = (
@@ -24,27 +23,11 @@ const AboutSectionOne = () => {
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 lg:w-1/2">
               <SectionTitle
-                title="Crafted for Startup, SaaS and Business Sites."
-                paragraph="At Amsha Generation, we go beyond just offering financial services. We are a community-driven platform that provides access to workshops, mentorship, and resources designed to inspire and guide users on their financial journey."
+                title="Our Story"
+                paragraph="We go beyond just offering financial services. We are a community-driven platform that provides access to workshops, mentorship, and resources designed to inspire and guide users on their financial journey."
                 mb="44px"
               />
-              <div className="mb-12 max-w-[570px] lg:mb-0" data-wow-delay=".15s">
-                <div className="relative mx-auto aspect-[25/24] max-w-[500px] lg:mr-0">
-                  <Image
-                    src="/images/about/about-image.svg"
-                    alt="about-image"
-                    fill
-                    className="mx-auto max-w-full drop-shadow-three dark:hidden dark:drop-shadow-none lg:mr-0"
-                  />
-                  <Image
-                    src="/images/about/about-image-dark.svg"
-                    alt="about-image"
-                    fill
-                    className="mx-auto hidden max-w-full drop-shadow-three dark:block dark:drop-shadow-none lg:mr-0"
-                  />
-                </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
